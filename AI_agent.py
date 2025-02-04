@@ -36,7 +36,7 @@ rag_chain = construct_rag_agent(DB_NAME='test2',
                                 custom_splitter=custom_splitter,
                                 custom_embeddings=custom_embeddings,
                                 mode='scrape',
-                                urls="https://www.investing.com",
+                                urls="https://www.medicalnewstoday.com/",
                                 search_type='similarity',
                                 k=5)
 
@@ -51,7 +51,7 @@ tools = [
             {"input": input, "chat_history": kwargs.get("chat_history", [])}
         ),
         # description="Useful for answering questions based on retrieved context",
-        description="Useful for answering questions about finance, stock, market based on retrieved context"
+        description="Useful for answering questions about health and medical news based on retrieved context"
     )
 ]
 
