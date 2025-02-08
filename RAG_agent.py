@@ -8,12 +8,53 @@ from langchain.chains.combine_documents import create_stuff_documents_chain
 from langchain_community.vectorstores import FAISS
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from dotenv import load_dotenv
+from APIs import get_pub_med_articles
+from langchain_core.documents import Document
+import fitz  # PyMuPDF
 
 
-def create_vector_store_and_retriever(faiss_index_path, mode=None, urls=None, embeddings=None, text_splitter=None, search_type='similarity', k=3):
+def load_pdfs(pdf_folder):
+    pdf_docs = []
+
+    for filename in os.listdir(pdf_folder):
+        if filename.endswith(".pdf"):
+            pdf_path = os.path.join(pdf_folder, filename)
+            doc = fitz.open(pdf_path)
+            text = ""
+
+            for page in doc:
+                text += page.get_text("text") + "\n"
+
+            pdf_docs.append(Document(page_content=text, metadata={
+                            "source": "PDF", "title": filename}))
+
+    return pdf_docs
+
+
+def create_vector_store_and_retriever(faiss_index_path, mode=None, urls=None, embeddings=None, text_splitter=None, search_type='similarity', k=3, dir_path=None):
     if mode == 'scrape':
         loader = WebBaseLoader(urls)
         documents = loader.load()
+
+    if mode == 'scrape pubmed':
+        documents = []
+        # Fetch PubMed articles
+        pubmed_articles = get_pub_med_articles(category="health", num=200)
+
+        # Convert PubMed JSON to LangChain Document format
+
+        pubmed_docs = [
+            Document(page_content=article["abstract"], metadata={
+                     "source": "PubMed", "title": article["title"]})
+            for article in pubmed_articles
+        ]
+
+        # Combine documents
+        documents.extend(pubmed_docs)
+    if mode == 'docs':
+        documents = []
+        pdf_docs = load_pdfs(pdf_folder=dir_path)
+        documents.extend(pdf_docs)
 
     # Chunking
     if text_splitter is None:
@@ -46,8 +87,9 @@ def create_vector_store_and_retriever(faiss_index_path, mode=None, urls=None, em
     return retriever
 
 
-def construct_rag_agent(DB_NAME, llm, google_api_key, custom_splitter, custom_embeddings, mode, urls, search_type, k):
-
+def construct_rag_agent(DB_NAME, llm, google_api_key, custom_splitter, custom_embeddings, mode, urls, search_type, k, dir_path):
+    os.environ["HTTP_PROXY"] = "http://127.0.0.1:10809"
+    os.environ["HTTPS_PROXY"] = "http://127.0.0.1:10809"
     current_dir = os.path.dirname(os.path.abspath(__file__))
     db_dir = os.path.join(current_dir, "db")
     os.makedirs(db_dir, exist_ok=True)
@@ -62,7 +104,8 @@ def construct_rag_agent(DB_NAME, llm, google_api_key, custom_splitter, custom_em
             embeddings=custom_embeddings,
             text_splitter=custom_splitter,
             search_type=search_type,
-            k=k
+            k=k,
+            dir_path=dir_path
         )
 
     else:
@@ -102,7 +145,7 @@ def construct_rag_agent(DB_NAME, llm, google_api_key, custom_splitter, custom_em
         "You are an assistant for question-answering tasks. Use "
         "the following retrieved context to answer the question. "
         "If you don't know the answer, just say that you don't know. "
-        "Use three sentences maximum and keep it concise."
+        "Use ten sentences maximum and keep it concise."
         "\n\n"
         "{context}"
     )
