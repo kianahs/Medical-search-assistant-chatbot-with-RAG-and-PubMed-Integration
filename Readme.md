@@ -51,8 +51,8 @@ The chatbot maintains a chat history, allowing it to contextualize follow-up que
 
 1. **User Query**: The user types a question into the chat interface.
 2. **Backend Processing**:
-   - The query is sent to the backend, where the RAG agent processes it.
-   - The agent uses the appropriate tool (news, PubMed, or the specified database) to retrieve relevant information.
+   - The query is sent to the backend, where an AI agent with multiple RAG agents as its tools processes it.
+   - The agent uses the appropriate RAG tool (news, PubMed, or the specified database) to retrieve relevant information.
    - The retrieved information is passed to the language model (Google Generative AI) to generate a response.
 3. **Response Generation**: The response is sent back to the frontend, where it is displayed to the user in a conversational format.
 
@@ -102,20 +102,65 @@ The chatbot maintains a chat history, allowing it to contextualize follow-up que
 - The frontend will be running on `http://localhost:3000`.
 - Open the frontend in your browser to start interacting with the chatbot.
 
-## Usage
-- Type your medical-related questions in the chat input box and press "Send" or hit Enter.
-- The chatbot will retrieve relevant information from its knowledge base and provide a response.
-- You can ask follow-up questions, and the chatbot will use the chat history to provide context-aware answers.
+## Running with Docker
 
-### Specified Database Functionality
-The chatbot can query a specified database (e.g., a collection of PDFs) for specific information. To use this functionality:
-1. Place your documents (e.g., PDFs) in the `pdfs` folder (or any specified directory).
-2. The chatbot will index these documents and allow you to query them for relevant information.
+### Building and Running Docker Containers
+You can use the provided Docker images to run both the frontend and backend.
 
-## Future Enhancements
-- **Integration with more medical databases**: Expand the chatbot's knowledge base by integrating with additional medical databases and journals.
-- **Multilingual Support**: Add support for multiple languages to make the chatbot accessible to a wider audience.
-- **User Authentication**: Implement user authentication to allow personalized interactions and save chat history.
+#### Pull Prebuilt Images (Recommended)
+```bash
+# Pull frontend image
+docker pull medical-assistant-app-frontend
+
+# Pull backend image
+docker pull medical-assistant-app-backend
+```
+
+#### Build Docker Images Manually
+```bash
+# Build backend image
+cd backend
+docker build -t medical-assistant-app-backend .
+
+# Build frontend image
+cd ../frontend
+docker build -t medical-assistant-app-frontend .
+```
+
+#### Run Containers
+```bash
+# Run backend container
+docker run -d -p 8000:8000 --name chatbot-backend medical-assistant-app-backend
+
+# Run frontend container
+docker run -d -p 3000:3000 --name chatbot-frontend medical-assistant-app-frontend
+```
+
+## CI/CD: Docker Build and Push
+To automate the Docker image build and push process, a CI/CD pipeline is set up.
+
+### Steps for Docker CI/CD
+1. **Build the Docker images**
+    ```bash
+    docker build -t medical-assistant-app-backend ./backend
+    docker build -t medical-assistant-app-frontend ./frontend
+    ```
+2. **Tag the images**
+    ```bash
+    docker tag medical-assistant-app-backend your-dockerhub-username/medical-assistant-app-backend:latest
+    docker tag medical-assistant-app-frontend your-dockerhub-username/medical-assistant-app-frontend:latest
+    ```
+3. **Push the images to DockerHub**
+    ```bash
+    docker push your-dockerhub-username/medical-assistant-app-backend:latest
+    docker push your-dockerhub-username/medical-assistant-app-frontend:latest
+    ```
+4. **Deploy from DockerHub**
+    ```bash
+    docker run -d -p 8000:8000 your-dockerhub-username/medical-assistant-app-backend:latest
+    docker run -d -p 3000:3000 your-dockerhub-username/medical-assistant-app-frontend:latest
+    ```
+
 
 ## Contributing
 Contributions are welcome! Please feel free to submit issues or pull requests to improve the project.
@@ -123,4 +168,3 @@ Contributions are welcome! Please feel free to submit issues or pull requests to
 ## License
 This project is licensed under the **MIT License**. See the LICENSE file for details.
 
-This Medical Chatbot is a powerful tool for anyone seeking reliable medical information. Whether you're a healthcare professional, a student, or just someone looking for answers, this chatbot is here to help!
