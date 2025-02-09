@@ -46,7 +46,7 @@ The chatbot maintains a chat history, allowing it to contextualize follow-up que
 - **dotenv**: Used for managing environment variables.
 - **PyMuPDF (fitz)**: A Python library for reading and extracting text from PDF documents.
 - **uvicorn**: An ASGI server for running the FastAPI application.
-
+- **Github actions**: A CI/CD tool for testing and docker build and push
 ## How It Works
 
 1. **User Query**: The user types a question into the chat interface.
@@ -137,29 +137,7 @@ docker run -d -p 3000:3000 --name chatbot-frontend medical-assistant-app-fronten
 ```
 
 ## CI/CD: Docker Build and Push
-To automate the Docker image build and push process, a CI/CD pipeline is set up.
-
-### Steps for Docker CI/CD
-1. **Build the Docker images**
-    ```bash
-    docker build -t medical-assistant-app-backend ./backend
-    docker build -t medical-assistant-app-frontend ./frontend
-    ```
-2. **Tag the images**
-    ```bash
-    docker tag medical-assistant-app-backend your-dockerhub-username/medical-assistant-app-backend:latest
-    docker tag medical-assistant-app-frontend your-dockerhub-username/medical-assistant-app-frontend:latest
-    ```
-3. **Push the images to DockerHub**
-    ```bash
-    docker push your-dockerhub-username/medical-assistant-app-backend:latest
-    docker push your-dockerhub-username/medical-assistant-app-frontend:latest
-    ```
-4. **Deploy from DockerHub**
-    ```bash
-    docker run -d -p 8000:8000 your-dockerhub-username/medical-assistant-app-backend:latest
-    docker run -d -p 3000:3000 your-dockerhub-username/medical-assistant-app-frontend:latest
-    ```
+To automate the Docker image build and push process, a CI/CD pipeline is set up with Github actions.
 
 
 ## Contributing
