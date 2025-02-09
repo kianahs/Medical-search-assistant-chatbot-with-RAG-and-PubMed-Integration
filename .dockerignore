@@ -1,0 +1,29 @@
+# Python-related files
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+myenv/
+env/
+*.env
+
+# Node-related files
+node_modules/
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+
+# General files to exclude
+.DS_Store
+*.git
+*.gitignore
+*.dockerignore
+
+# Logs and temporary files
+*.log
+*.tmp
+
+# IDE/editor-specific files
+.idea/
+.vscode/
+*.swp
