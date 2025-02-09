@@ -1,19 +1,18 @@
-# Use an official Node.js runtime as a parent image
 FROM node:16
 
-# Set the working directory in the container
+# working directory
 WORKDIR /app
 
 # Copy the package.json and package-lock.json first for faster builds
 COPY package*.json /app/
 
-# Install the dependencies
+
 RUN npm install
 
-# Copy the rest of the application files
+# Copy the rest of the files
 COPY . /app/
 
-# Expose port 3000 to access the React app
+# React app port
 EXPOSE 3000
 
 # Run the React app
