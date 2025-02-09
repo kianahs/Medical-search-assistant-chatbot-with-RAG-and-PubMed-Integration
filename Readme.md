@@ -1,6 +1,8 @@
 # Medical Chatbot with RAG and PubMed Integration
 
 ![Video](backend/assets/video-gif.gif)
+
+
 ![Full Video](backend/assets/video.mp4)
 
 ## Overview
