@@ -29,7 +29,7 @@ jobs:
     - name: Build and Push Frontend Docker Image
       uses: mr-smithers-excellent/docker-build-push@v6
       with:
-        image: ${{ secrets.DOCKER_USERNAME }}/medical-assistant-app-frontend:${{ github.sha }}
+        image: kianahs/medical-assistant-app-frontend
         registry: docker.io
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
@@ -40,7 +40,7 @@ jobs:
     - name: Build and Push Backend Docker Image
       uses: mr-smithers-excellent/docker-build-push@v6
       with:
-        image: ${{ secrets.DOCKER_USERNAME }}/medical-assistant-app-backend:${{ github.sha }}
+        image: kianahs/medical-assistant-app-backend
         registry: docker.io
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
