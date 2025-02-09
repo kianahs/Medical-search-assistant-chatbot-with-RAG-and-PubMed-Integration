@@ -1,10 +1,9 @@
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  
 }
 
 .bg-gradient {
-  background: linear-gradient(135deg, #c8c9d2, #eef6f5);
+  background: linear-gradient(135deg, #6e7aeb, #20b2aa);
 }
 
 .chat-container {
@@ -22,14 +21,4 @@ body {
 
 button:disabled {
   background-color: #d3d3d3;
-}
-
-/* .chatbot-container {
-  max-width: 500px; 
-  width: 100%;
-  margin-top: rem; 
-} */
-
-.chatbot-container .chat-container {
-  width: 100%; /* Ensures the chatbot container uses all available width */
 }

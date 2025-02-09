@@ -5,7 +5,6 @@ const Chatbot = () => {
   const [query, setQuery] = useState("");
   const [chatHistory, setChatHistory] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [currentBotMessage, setCurrentBotMessage] = useState("");
 
   const sendMessage = async () => {
     if (!query.trim()) return;
@@ -19,7 +18,7 @@ const Chatbot = () => {
         query,
       });
       const botResponse = response.data.response;
-      typeMessage(botResponse); // types word by word
+      typeMessage(botResponse);
     } catch (error) {
       console.error("Error fetching response:", error);
       setChatHistory((prev) => [
@@ -36,15 +35,31 @@ const Chatbot = () => {
     const words = message.split(" ");
     let index = 0;
 
+    setChatHistory((prev) => [...prev, { sender: "bot", text: "" }]);
+
     const interval = setInterval(() => {
-      setCurrentBotMessage((prev) => prev + " " + words[index]);
+      setChatHistory((prev) => {
+        const updatedChat = [...prev];
+        const lastMessageIndex = updatedChat.length - 1;
+
+        updatedChat[lastMessageIndex] = {
+          ...updatedChat[lastMessageIndex],
+          text:
+            updatedChat[lastMessageIndex].text +
+            (index > 0 ? " " : "") +
+            words[index],
+        };
+
+        return updatedChat;
+      });
+
       index += 1;
 
       if (index === words.length) {
-        clearInterval(interval); // Stop at end
+        clearInterval(interval);
         setLoading(false);
       }
-    }, 200); // Adjust speed in ms
+    }, 200); // speed of typing in ms
   };
 
   return (
@@ -66,14 +81,6 @@ const Chatbot = () => {
             </div>
           ))}
           {loading && <div className="text-muted text-center">Thinking...</div>}
-          {currentBotMessage && (
-            <div
-              className="mb-3 p-3 rounded-3 bg-secondary text-white text-start me-auto"
-              style={{ maxWidth: "75%" }}
-            >
-              {currentBotMessage}
-            </div>
-          )}
         </div>
         <div className="d-flex">
           <input
