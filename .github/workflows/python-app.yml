@@ -3,10 +3,10 @@ name: CI/CD Pipeline for Medical Assistant App
 on:
   push:
     branches:
-      - main  # Change if your default branch is different
+      - master 
   pull_request:
     branches:
-      - main
+      - master
 
 permissions:
   contents: read
