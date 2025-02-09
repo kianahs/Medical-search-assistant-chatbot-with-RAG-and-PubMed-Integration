@@ -1,5 +1,8 @@
 # Medical Chatbot with RAG and PubMed Integration
 
+![Video Demo](path/to/your-video.mp4)
+
+
 ## Overview
 This project is a **Medical Chatbot** designed to provide accurate and relevant information on health and medical topics. It leverages **Retrieval-Augmented Generation (RAG)** to retrieve information from various sources, including **PubMed articles**, medical news websites, and a specified database of documents (e.g., PDFs). The chatbot is built using a combination of modern AI technologies and web development frameworks, making it a powerful tool for answering medical-related queries.
 
