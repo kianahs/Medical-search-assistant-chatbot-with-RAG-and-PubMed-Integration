@@ -1,6 +1,4 @@
-AI_agent copy.py
-myenv
-db
-.env
-test.py
-test2.py
+backend/myenv
+backend/db
+backend/.env
+frontend/node_modules
