@@ -1,0 +1,44 @@
+name: CI/CD Pipeline for Medical Assistant App
+
+on:
+  push:
+    branches:
+      - main  # Change if your default branch is different
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  build_and_deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    # Step 1: Checkout repository
+    - name: Checkout repository
+      uses: actions/checkout@v2  
+
+    # Step 2: Set up .env file for backend
+    - name: Set up .env file for backend
+      run: |
+        echo "GOOGLE_API_KEY=${{ secrets.GOOGLE_API_KEY }}" > backend/.env
+
+    # Step 3: Build and Push Frontend Docker Image
+    - name: Build and Push Frontend Docker Image
+      uses: mr-smithers-excellent/docker-build-push@v6
+      with:
+        image: ${{ secrets.DOCKER_USERNAME }}/medical-assistant-app-frontend:${{ github.sha }}
+        registry: docker.io
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+
+    # Step 4: Build and Push Backend Docker Image
+    - name: Build and Push Backend Docker Image
+      uses: mr-smithers-excellent/docker-build-push@v6
+      with:
+        image: ${{ secrets.DOCKER_USERNAME }}/medical-assistant-app-backend:${{ github.sha }}
+        registry: docker.io
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
