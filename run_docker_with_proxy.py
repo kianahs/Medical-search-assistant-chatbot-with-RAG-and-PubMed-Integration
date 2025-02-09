@@ -22,8 +22,8 @@ backend_tagged = f"{docker_username}/{backend_image_name}:{tag}"
 
 # Tag 
 try:
-    subprocess.run(["docker", "tag", "rag-frontend", frontend_tagged], check=True)  # Tag the frontend image
-    subprocess.run(["docker", "tag", "rag-backend", backend_tagged], check=True)  # Tag the backend image
+    subprocess.run(["docker", "tag", "rag-frontend", frontend_tagged], check=True)  
+    subprocess.run(["docker", "tag", "rag-backend", backend_tagged], check=True)  
     print(f"Successfully tagged images: {frontend_tagged} and {backend_tagged}")
 except subprocess.CalledProcessError as e:
     print(f"Error tagging images: {e}")
